@@ -92,18 +92,22 @@ If, however, the module is set up so that when a caller loads and initializes th
 -------------
   
   Imagine this code.
+  
+```javascript
+var someModule = require('pathToSomeModule');
 
-    var someModule = require('pathToSomeModule');
-
-    someModule();
+someModule();
+```
 
 Here, we DEPEND not on the name, but on the path of that file. We are also using the SAME file every time.
 
 Let's look at angular's way (for the client, i know, bear with me)
-  
-    app.controller('someCtrl', function($scope) {
-      $scope.foo = 'bar';
-    });
+
+```javascript  
+app.controller('someCtrl', function($scope) {
+  $scope.foo = 'bar';
+});
+```
 
 I know client side js doesn't have file imports / exports, but it's the underlying concept that you should look at. Nowhere does this controller specify WHAT the $scope variable ACTUALLY is, it just knows that angular is giving it something CALLED $scope.
 
@@ -112,12 +116,14 @@ It is like saying, *Don't call me, I'll call you*
 
 Now let's implement our original code with something like a service container (there are many different solutions to this, containers are not the only option)
 
-    // The only require statement
-    var container = require('pathToContainer')
+```javascript
+// The only require statement
+var container = require('pathToContainer')
 
-    var someModule = container.resolve('someModule');
-    
-    someModule();
+var someModule = container.resolve('someModule');
+
+someModule();
+```
 
 What did we accomplish here? Now, we only have to know ONE thing, the container (or whatever abstraction you choose). We have no idea what `someModule` actually is, or where it's source file is, just that it's what we got from the container. The benefit of this is that, if we want to use a different implementation of `someModule`, as long as it conforms to the same API as the orignal, we can just replace it ONE place in our ENTIRE app. The container. Now every module that calls `someModule` will get the new implementation. The idea is that when you make a module, you define the api that you use to interact with it. If different implementations all conform to a single api (or you write an adapter that conforms to it) then you can swap out implementations like dirty underwear and your app will just WORK.
 
