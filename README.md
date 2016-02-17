@@ -48,7 +48,7 @@ In this case the `connect-session-knex` module has to implement the following me
 
 *That is a text copied from a book, now from my own knowledge:
 
-**At the beginning I did myself to questions**
+**At the beginning I did myself two questions**
 
 - *Everytime a require is call in Nodejs, is that named dependency injection? Or what is the real meaning of dependency injection?*
 
