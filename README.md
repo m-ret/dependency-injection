@@ -91,8 +91,8 @@ If, however, the module is set up so that when a caller loads and initializes th
   
 -------------
   
-  Imagine this code.
-  
+Imagine this code.
+
 ```javascript
 var someModule = require('pathToSomeModule');
 
@@ -121,7 +121,7 @@ Now let's implement our original code with something like a service container (t
 var container = require('pathToContainer')
 
 var someModule = container.resolve('someModule');
-
+    
 someModule();
 ```
 
@@ -130,3 +130,39 @@ What did we accomplish here? Now, we only have to know ONE thing, the container 
 This approach is not for everyone, and some people hate lugging around the container.
 
 My personal opinion, I would rather code to an interface ( a consistent api between implentations ) than code to a concrete implementation.
+
+
+An actual example of Dependency *Injection* in node.js
+
+```javascript
+// In a file, far, far, away
+module.exports = function(dependencyA, dependencyB) {
+  dependencyA();
+  dependencyB();
+}
+
+// In another file, the `caller`
+// This is where the actual, concrete implementation is stored
+var depA = someConcreteImplementation;
+var depB = someOtherConcreteImplementation;
+
+var someModule = require('pathToSomeModule');
+
+someModule(depA, depB);
+```
+
+The downside to this, is now the caller needs to know what your dependencies are. Some are comforted by this and like it, others believe it's a hassle.
+
+I prefer this next approach, personally.
+
+If you aren't using babel, or something that changes your functions behind the scenes, you can use this approach to get the angular-style parameter-parsing
+
+http://krasimirtsonev.com/blog/article/Dependency-injection-in-JavaScript
+
+Then you can parse the function you get from `require`, and not use a container at all.
+
+-------------
+
+Here is a resource where you can read about this
+
+http://www.schibsted.pl/2015/12/how-to-do-dependency-injection-in-node-js/
